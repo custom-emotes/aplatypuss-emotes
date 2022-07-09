@@ -20,5 +20,6 @@
 	{"id":"kindasus","code":"platyHOLDUP"},
 	{"id":"head","code":"platyT1"},
 	{"id":"arm","code":"platyT2"},
-	{"id":"legs","code":"platyT3"}
+	{"id":"legs","code":"platyT3"},
+	{"id":"platyleak","code":"platyLEAK"}
 ]
