@@ -23,5 +23,6 @@
 	{"id":"legs","code":"platyT3"},
 	{"id":"platyleak","code":"platyLEAK"},
 	{"id":"platyobjection","code":"platyOBJECTION"},	
-	{"id":"platyace","code":"platyACE"}
+	{"id":"platyace","code":"platyACE"},
+	{"id":"platydance","code":"platyDANCE"}
 ]
