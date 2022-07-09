@@ -17,5 +17,8 @@
 	{"id":"eyesshaking","code":"EYESSHAKING"},
 	{"id":"platyblind","code":"platyBLIND"},
 	{"id":"starewide","code":"WIDESTARE"},
-	{"id":"kindasus","code":"platyHOLDUP"}
+	{"id":"kindasus","code":"platyHOLDUP"},
+	{"id":"head","code":"platyT1"},
+	{"id":"arms","code":"platyT2"},
+	{"id":"legs","code":"platyT3"}
 ]
