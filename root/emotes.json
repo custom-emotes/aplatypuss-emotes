@@ -22,5 +22,6 @@
 	{"id":"platyobjection","code":"platyOBJECTION"},	
 	{"id":"platyace","code":"platyACE"},
 	{"id":"platydance","code":"platyDANCE"},
-	{"id":"platycultist","code":"platyCULTIST"}
+	{"id":"platycultist","code":"platyCULTIST"},
+	{"id":"platydemon","code":"platyDEMON"},
 ]
