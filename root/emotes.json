@@ -1,7 +1,4 @@
 [
-	{"id":"ckype","code":"CKYPE"},
-	{"id":"morbiustaxes","code":"platyMORBIUSTAX"},
-	{"id":"morbiusdad","code":"platyMORBIUSDAD"},
 	{"id":"morbius1","code":"MORBIUS1"},
 	{"id":"morbius2","code":"MORBIUS2"},
 	{"id":"morbius3","code":"MORBIUS3"},
@@ -9,18 +6,5 @@
 	{"id":"morbius5","code":"MORBIUS5"},
 	{"id":"morbius6","code":"MORBIUS6"},
 	{"id":"morbius7","code":"MORBIUS7"},
-	{"id":"rakkirbooty","code":"RAKKIRBOOTY"},
-	{"id":"platynom","code":"platyNOM"},
-	{"id":"platyzoa","code":"platyZOA"},
-	{"id":"platywave","code":"platyWAVE"},
-	{"id":"platycart","code":"platyCART"},
-	{"id":"eyesshaking","code":"EYESSHAKING"},
-	{"id":"platyblind","code":"platyBLIND"},
-	{"id":"kindasus","code":"platyHOLDUP"},
-	{"id":"platyobjection","code":"platyOBJECTION"},	
-	{"id":"platyace","code":"platyACE"},
-	{"id":"platydance","code":"platyDANCE"},
-	{"id":"platycultist","code":"platyCULTIST"},
-	{"id":"platydemon","code":"platyDEMON"},
-	{"id":"ayyo","code":"AYYOYOUWANTTHISWHEEL"}
+	{"id":"kindasus","code":"platyHOLDUP"}
 ]
