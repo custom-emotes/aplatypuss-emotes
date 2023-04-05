@@ -29,6 +29,7 @@ fs.readdirSync(emotesFolder).forEach(async file => {
 
 copyAllFilesToDestination('./assets/',"./output/static/");
 copyAllFilesToDestination('./root/','./output/');
+fs.copyFile('icon.png', './output/static/icon.png', (err) => {});
 
 
 async function ResizeImages(image, name, outputFolder){
