@@ -35,6 +35,10 @@ async function ResizeImages(image, name, outputFolder){
     await image.resize({height: 28}).toFile(outputFolder + name + "_28.webp" )
     await image.resize({height: 56}).toFile(outputFolder + name + "_56.webp" )
     await image.resize({height: 112}).toFile(outputFolder + name + "_112.webp" )
+    
+    await image.resize({height: 28}).toFile(outputFolder + name + "_1X.webp" )
+    await image.resize({height: 56}).toFile(outputFolder + name + "_2X.webp" )
+    await image.resize({height: 112}).toFile(outputFolder + name + "_3X.webp" )
 }
 function copyAllFilesToDestination(sourceFolder, destinationFolder){
     fs.readdirSync(sourceFolder).forEach(async file => {
