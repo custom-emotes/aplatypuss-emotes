@@ -35,6 +35,7 @@
 					},
 					changed: () => this.updateEmotes()
 				});
+				this.onEnable();
 			}
 		
 			onEnable() {
