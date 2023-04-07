@@ -213,7 +213,7 @@
 		}
 		
 		Aplatypuss.register();
-
+	}
 	function checkExistance(attempts) {
 		if (window.FrankerFaceZ) {
 			main_init();
