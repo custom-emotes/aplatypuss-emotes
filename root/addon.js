@@ -102,7 +102,7 @@
 							id: `${this.BADGE_PREFIX}${i}`,
 							addon: this.ADDON_ID,
 							title: badge.tooltip,
-							slot: 420,
+							slot: 420 + i,
 							image: this.ASSETS_URL + badge.image1,
 							urls: {
 								1: this.ASSETS_URL + badge.image1,
