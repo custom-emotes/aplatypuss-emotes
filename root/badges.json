@@ -2,5 +2,6 @@
 	{"tooltip":"-WAREWIZARD","image1":"morbius1_1X.webp","image2":"morbius1_2X.webp","image3":"morbius1_3X.webp","users":["67828386"]},
 	{"tooltip":"VideoMan","image1":"eyesshaking_28.webp","image2":"eyesshaking_56.webp","image3":"eyesshaking_112.webp","users":["25118940"]},
 	{"tooltip":"King","image1":"morbius3_1X.webp","image2":"morbius3_2X.webp","image3":"morbius3_3X.webp","users":["45991495"]},
-	{"tooltip":"CANSEE","image1":"morbius7_1X.webp","image2":"morbius7_2X.webp","image3":"morbius7_3X.webp","users":["152346598"]}
+	{"tooltip":"CANSEE","image1":"morbius7_1X.webp","image2":"morbius7_2X.webp","image3":"morbius7_3X.webp","users":["152346598"]},
+	{"tooltip":"D2 Player","image1":"morbius4_1X.webp","image2":"morbius4_2X.webp","image3":"morbius4_3X.webp","users":["67828386","45991495","96537353"]}
 ]
