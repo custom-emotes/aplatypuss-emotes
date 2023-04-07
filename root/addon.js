@@ -2,17 +2,17 @@
 (() => {
 	function main_init() {
 		class Aplatypuss extends FrankerFaceZ.utilities.addon.Addon {
-			HOST_URL = "https://aplatypuss-emotes.pages.dev/"
-			ASSETS_URL = this.HOST_URL + "static/"
-			CHANNEL_ID = 39464264
-			ADDON_ID = 'addon--aplatypuss'
-			ADDON_EMOTES_ID = 'addon--aplatypuss--emotes'
-			ADDON_BADGES_ID = 'addon--aplatypuss--badges'
-			BADGES_SETTINGS_CHECK = 'aplatypuss.enable_badges'
-			EMOTICONS_SETTINGS_CHECK = 'aplatypuss.enable_emoticons'
-			BADGE_PREFIX = 'aplatypuss-badge-'
-			ADDON_NAME = 'APlatypuss'
-			BADGE_URL = 'https://aplatypuss-emotes.pages.dev'
+			HOST_URL = "https://aplatypuss-emotes.pages.dev/";
+			ASSETS_URL = this.HOST_URL + "static/";
+			CHANNEL_ID = 39464264;
+			ADDON_ID = 'addon--aplatypuss';
+			ADDON_EMOTES_ID = 'addon--aplatypuss--emotes';
+			ADDON_BADGES_ID = 'addon--aplatypuss--badges';
+			BADGES_SETTINGS_CHECK = 'aplatypuss.enable_badges';
+			EMOTICONS_SETTINGS_CHECK = 'aplatypuss.enable_emoticons';
+			BADGE_PREFIX = 'aplatypuss-badge-';
+			ADDON_NAME = 'APlatypuss';
+			BADGE_URL = 'https://aplatypuss-emotes.pages.dev';
 		
 			constructor(...args) {
 				super(...args);
