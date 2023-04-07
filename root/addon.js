@@ -2,6 +2,18 @@
 (() => {
 	function main_init() {
 		class Aplatypuss extends FrankerFaceZ.utilities.addon.Addon {
+			HOST_URL = "https://aplatypuss-emotes.pages.dev/"
+			ASSETS_URL = this.HOST_URL + "static/"
+			CHANNEL_ID = 39464264
+			ADDON_ID = 'addon--aplatypuss'
+			ADDON_EMOTES_ID = 'addon--aplatypuss--emotes'
+			ADDON_BADGES_ID = 'addon--aplatypuss--badges'
+			BADGES_SETTINGS_CHECK = 'aplatypuss.enable_badges'
+			EMOTICONS_SETTINGS_CHECK = 'aplatypuss.enable_emoticons'
+			BADGE_PREFIX = 'aplatypuss-badge-'
+			ADDON_NAME = 'APlatypuss'
+			BADGE_URL = 'https://aplatypuss-emotes.pages.dev'
+		
 			constructor(...args) {
 				super(...args);
 		
@@ -13,39 +25,39 @@
 		
 				this.badgesLength = 0;
 		
-				this.settings.add('aplatypuss.badges', {
+				this.settings.add(this.BADGES_SETTINGS_CHECK, {
 					default: true,
 					ui: {
-						path: 'Add-Ons > APlatypuss >> Badges',
+						path: `Add-Ons > ${this.ADDON_NAME} >> Badges`,
 						title: 'Enable Badges',
-						description: 'Enable to show user badges',
+						description: 'Enable to show custom badges',
 						component: 'setting-check-box',
 					},
-					changed: () => this.updateBadges()
+					changed: () => this.updateAllChannels()
 				});
 		
-				this.settings.add('aplatypuss.enable_emoticons', {
+				this.settings.add(this.EMOTICONS_SETTINGS_CHECK, {
 					default: true,
 		
 					ui: {
-						path: 'Add-Ons > APlatypuss >> Emotes',
+						path: `Add-Ons > ${this.ADDON_NAME} >> Emotes`,
 						title: 'Show Emotes',
-						description: 'Enable to show APlatypuss emotes.',
+						description: 'Enable to show custom emotes.',
 						component: 'setting-check-box',
 					},
-					changed: () => this.updateEmotes()
+					changed: () => this.updateAllChannels()
 				});
+
 				this.onEnable();
 			}
 		
 			onEnable() {
-				this.log.debug('Aplatypuss module was enabled successfully.');
-				
+				this.log.debug(`${this.ADDON_NAME} module was enabled successfully.`);
+		
 				this.on('chat:room-add', this.roomAdd);
 				this.on('chat:room-remove', this.roomRemove);
 		
-				this.updateEmotes();
-				this.updateBadges();
+				this.updateAllChannels();
 			}
 		
 			roomAdd(room) {
@@ -56,24 +68,83 @@
 				this.updateChannel(room);
 			}
 		
-			async updateChannelEmotes(room, attempts = 0) {
-				const realID = 'addon--aplatypuss--emotes';
-				room.removeSet('addon--aplatypuss', realID);
-				//this.emotes.unloadSet(realID);
+			updateChannel(room) {
+				if (room._id != this.CHANNEL_ID) {
+					this.unloadEmotes();
+					this.disableBadges();
+				}
+				else {
+					this.updateChannelEmotes(room);
+					this.updateBadges();
+				}
+			}
 		
-				if (!this.chat.context.get('aplatypuss.enable_emoticons')) {
+			updateAllChannels() {
+				for (const room of this.chat.iterateRooms()) {
+					if (room) this.updateChannel(room);
+				}
+			}
+		
+			async updateBadges(attempts = 0) {
+				this.disableBadges();
+				if (!this.settings.get(this.BADGES_SETTINGS_CHECK)) {
 					return;
 				}
-				
-				const BASE_URL = "https://aplatypuss-emotes.pages.dev/static/"
-				const response = await fetch('https://aplatypuss-emotes.pages.dev/emotes.json');
+				const response = await fetch(this.HOST_URL + 'badges.json');
 				if (response.ok) {
-					const platyEmotes = [];
+					const badgeData = await response.json();
+					this.badgesLength = badgeData.length;
+		
+					for (let i = 0; i < this.badgesLength; i++) {
+						const badge = badgeData[i];
+						const badgeId = `${this.BADGE_PREFIX}${i}`;
+						this.badges.loadBadgeData(badgeId, {
+							id: `${this.BADGE_PREFIX}${i}`,
+							addon: this.ADDON_ID,
+							title: badge.tooltip,
+							slot: 420,
+							image: this.ASSETS_URL + badge.image1,
+							urls: {
+								1: this.ASSETS_URL + badge.image1,
+								2: this.ASSETS_URL + badge.image2,
+								4: this.ASSETS_URL + badge.image3,
+							},
+							click_url: this.BADGE_URL
+		
+						});
+						this.badges.setBulk(this.ADDON_BADGES_ID, badgeId, badge.users);
+		
+					}
+					this.badges.buildBadgeCSS();
+					this.emit('chat:update-lines');
+		
+				} else {
+					if (response.status === 404) return;
+		
+					const newAttempts = (attempts || 0) + 1;
+					if (newAttempts < 12) {
+						this.log.error(`Failed to fetch ${this.ADDON_NAME} badges. Trying again in 5 seconds.`);
+						setTimeout(this.updateBadges.bind(this, newAttempts), 5000);
+					}
+				}
+		
+			}
+		
+			async updateChannelEmotes(room, attempts = 0) {
+				room.removeSet(this.ADDON_ID, this.ADDON_EMOTES_ID);
+		
+				if (!this.chat.context.get(this.EMOTICONS_SETTINGS_CHECK)) {
+					return;
+				}
+		
+				const response = await fetch(this.HOST_URL + 'emotes.json');
+				if (response.ok) {
+					const emotesData = [];
 		
 					for (const dataEmote of await response.json()) {
-						
+		
 						const arbitraryEmote = /[^A-Za-z0-9]/.test(dataEmote.code);
-				
+		
 						const emote = {
 							id: dataEmote.code,
 							urls: {
@@ -84,114 +155,64 @@
 							height: dataEmote.width,
 							require_spaces: arbitraryEmote,
 							modifier: dataEmote.modifier !== undefined,
-							modifier_offset:  dataEmote.modifier,
+							modifier_offset: dataEmote.modifier,
 						};
-				
+		
 						emote.urls = {
-							1: BASE_URL + `${dataEmote.id}` + "_28.webp",
-							2: BASE_URL + `${dataEmote.id}` + "_56.webp",
-							4: BASE_URL + `${dataEmote.id}` + "_112.webp",
+							1: this.ASSETS_URL + `${dataEmote.id}` + "_1X.webp",
+							2: this.ASSETS_URL + `${dataEmote.id}` + "_2X.webp",
+							4: this.ASSETS_URL + `${dataEmote.id}` + "_3X.webp",
 						};
-				
-				
-						platyEmotes.push(emote);
+		
+		
+						emotesData.push(emote);
 					}
-					
-			
+		
+		
 					let setEmotes = [];
-					setEmotes = setEmotes.concat(platyEmotes);
-			
+					setEmotes = setEmotes.concat(emotesData);
+		
 					let set = {
 						emoticons: setEmotes,
 						title: 'Channel Emotes',
-						source: 'Aplatypuss',
-						icon: 'https://aplatypuss-emotes.pages.dev/static/icon.png',
+						source: `${this.ADDON_NAME}`,
+						icon: this.ASSETS_URL + 'icon.png',
 					};
-					room.addSet('addon--aplatypuss', realID, set);
-				
-				}else {
+					room.addSet(this.ADDON_ID, this.ADDON_EMOTES_ID, set);
+		
+				} else {
 					if (response.status === 404) return;
 		
 					const newAttempts = (attempts || 0) + 1;
 					if (newAttempts < 12) {
-						this.log.error('Failed to fetch global emotes. Trying again in 5 seconds.');
-						setTimeout(this.updateChannelEmotes.bind(this,room, newAttempts), 5000);
+						this.log.error(`Failed to fetch ${this.ADDON_NAME} emotes. Trying again in 5 seconds.`);
+						setTimeout(this.updateChannelEmotes.bind(this, room, newAttempts), 5000);
 					}
 				}
 			}
 		
-			async updateChannel(room) {
-				const realID = 'addon--aplatypuss--emotes';
-		
-				console.log(room);
-				if(room._id != 39464264){ //Platy Twitch ID
-					//console.log("disabling Aplatypuss emotes")
-					this.emotes.unloadSet('addon--aplatypuss', realID);
-				}
-				else{
-					//console.log("Aplatypuss emotes enabled")
-					this.updateChannelEmotes(room);
-					this.emotes.loadSet('addon--aplatypuss', realID);
-		
-				}
-		
-			}
-		
-			updateEmotes() {
-				for (const room of this.chat.iterateRooms()) {
-					if (room) this.updateChannel(room);
-				}
-			}
-		
-			async updateBadges() {
-				this.removeBadges();
-				const BASE_URL = "https://aplatypuss-emotes.pages.dev/static/"
-		
-				if (this.settings.get('aplatypuss.badges')) {
-					const response = await fetch('https://aplatypuss-emotes.pages.dev/badges.json');
-					const badgeData = await response.json();
-					this.badgesLength = badgeData.length;
-		
-					for (let i = 0; i < this.badgesLength; i++) {
-						const badge = badgeData[i];
-						const badgeId = this.getIdFromIndex(i);
-						this.badges.loadBadgeData(badgeId, {
-							id: `aplatypuss-badge-${i}`,
-							addon: 'aplatypuss',
-							title: badge.tooltip,
-							slot: 420,
-							image: BASE_URL + badge.image1,
-							urls: {
-								1: BASE_URL + badge.image1,
-								2: BASE_URL + badge.image2,
-								4: BASE_URL + badge.image3,
-							},
-							click_url: 'https://aplatypuss-emotes.pages.dev'
-		
-						});
-						this.badges.setBulk('aplatypuss', badgeId, badge.users);
-		
-					}
+			disableBadges() {
+				for (let i = 0; i < this.badgesLength; i++) {
+					this.badges.deleteBulk(this.ADDON_BADGES_ID, `${this.BADGE_PREFIX}${i}`);
 				}
 				this.badges.buildBadgeCSS();
 				this.emit('chat:update-lines');
 			}
 		
-			removeBadges() {
-				for (let i = 0; i < this.badgesLength; i++) {
-					this.badges.deleteBulk('aplatypuss', this.getIdFromIndex(i));
-				}
-		
-				this.badgesLength = 0;
+			unloadEmotes() {
+				this.emotes.unloadSet(this.ADDON_ID, this.ADDON_EMOTES_ID);
 			}
+		
+			// loadEmotes() {
+			// 	this.emotes.loadSet(this.ADDON_ID, this.ADDON_EMOTES_ID);
+			// }
 		
 			getIdFromIndex(index) {
-				return `aplatypuss-badge-${index}`;
+				return;
 			}
 		}
-
+		
 		Aplatypuss.register();
-	}
 
 	function checkExistance(attempts) {
 		if (window.FrankerFaceZ) {
