@@ -4,5 +4,11 @@
 /emotes.json
 	cache-control: public, no-cache
 
+/badges.json
+	cache-control: public, no-cache
+
 /*.js
 	cache-control: public, max-age=31536000
+
+/platyaddonbeta.js
+	cache-control: public, no-cache
