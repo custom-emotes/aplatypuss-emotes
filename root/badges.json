@@ -1,7 +1,5 @@
 [
-	{"tooltip":"-WAREWIZARD","image1":"morbius1_1X.webp","image2":"morbius1_2X.webp","image3":"morbius1_3X.webp","users":["67828386"]},
 	{"tooltip":"VideoMan","image1":"eyesshaking_28.webp","image2":"eyesshaking_56.webp","image3":"eyesshaking_112.webp","users":["25118940"]},
 	{"tooltip":"King","image1":"reotto_28.webp","image2":"reotto_56.webp","image3":"reotto_112.webp","users":["45991495"]},
-	{"tooltip":"CANSEE","image1":"morbius7_1X.webp","image2":"morbius7_2X.webp","image3":"morbius7_3X.webp","users":["152346598"]},
-	{"tooltip":"King's reotto jester court member","image1":"jester_1X.webp","image2":"jester_2X.webp","image3":"jester_3X.webp","users":["67828386","96537353","583738728"]}
+	{"tooltip":"CANSEE","image1":"morbius7_1X.webp","image2":"morbius7_2X.webp","image3":"morbius7_3X.webp","users":["152346598"]}
 ]
