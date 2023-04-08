@@ -4,7 +4,7 @@
 // @author nznzaza
 // @description Injects Aplatypuss FFZ BETA Add-On user-script
 // @match *://*.twitch.tv/*
-// @run-at document-body
+// @run-at document-start
 // ==/UserScript==
 
 (() => {
