@@ -30,7 +30,7 @@ fs.readdirSync(emotesFolder).forEach(async file => {
 copyAllFilesToDestination('./assets/',"./output/static/");
 copyAllFilesToDestination('./root/','./output/');
 fs.copyFile('icon.png', './output/static/icon.png', (err) => {});
-
+fs.copyFile('./root/platyaddon.js', './output/addon.js', (err) => {});
 
 async function ResizeImages(image, name, outputFolder){
     await image.resize({height: 28}).toFile(outputFolder + name + "_28.webp" )

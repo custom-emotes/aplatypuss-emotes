@@ -54,20 +54,16 @@
 			onEnable() {
 				this.log.debug(`${this.ADDON_NAME} module was enabled successfully.`);
 		
-				this.on('chat:room-add', this.roomAdd);
-				this.on('chat:room-remove', this.roomRemove);
-		
+				this.on('chat:room-add', this.roomChange);
+				this.on('chat:room-remove', this.roomChange);
+				this.on('chat:room-update-login', this.roomChange);
 				this.updateAllChannels();
 			}
-		
-			roomAdd(room) {
+
+			roomChange(room) {
 				this.updateChannel(room);
 			}
-		
-			roomRemove(room) {
-				this.updateChannel(room);
-			}
-		
+
 			updateChannel(room) {
 				if (room._id != this.CHANNEL_ID) {
 					this.unloadEmotes();
