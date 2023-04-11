@@ -4,7 +4,4 @@ output
 package-lock.json
 .DS_Store
 
-*.js
 *.map
-
-!root/*.js
