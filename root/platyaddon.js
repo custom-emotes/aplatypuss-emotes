@@ -71,7 +71,7 @@
 				}
 				else {
 					this.updateChannelEmotes(room);
-					//this.updateBadges();
+					this.updateBadges();
 				}
 			}
 		
