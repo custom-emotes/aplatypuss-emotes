@@ -48,10 +48,10 @@
 					changed: () => this.updateAllChannels()
 				});
 
-				this.onEnable();
+				setTimeout(() => this.enable(), 0)
 			}
 		
-			onEnable() {
+			enable() {
 				this.log.debug(`${this.ADDON_NAME} module was enabled successfully.`);
 		
 				this.on('chat:room-add', this.roomChange);
@@ -208,7 +208,7 @@
 			}
 		}
 		
-		Aplatypuss.register();
+		Aplatypuss.register("aplatypuss-emotes");
 	}
 	function checkExistance(attempts) {
 		if (window.FrankerFaceZ) {
