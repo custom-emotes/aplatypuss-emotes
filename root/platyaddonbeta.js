@@ -14,6 +14,7 @@
 			ADDON_NAME = 'APlatypuss';
 			BADGES_START_SLOT = 420;
 			DEFAULT_BADGE_URL = 'https://thetiki.club/';
+			REFRESH_TIME = 60 * 1000 * 2;
 		
 			constructor(...args) {
 				super(...args);
@@ -55,30 +56,38 @@
 				this.on('chat:room-remove', this.roomChange);
 				this.on('chat:room-update-login', this.roomChange);
 				this.updateAllChannels();
+		
+				setTimeout(this.refreshData(), this.REFRESH_TIME);
 			}
 		
+			refreshData(){
+				console.log('refreshing badges')
+				this.updateAllChannels(false);
+				this.updateBadges(0,false);
+				setTimeout(this.refreshData(), this.REFRESH_TIME);
+			}
 			roomChange(room) {
 				this.updateChannel(room);
 			}
 		
-			updateChannel(room) {
-				if (this.CHANNELS_ID.indexOf(parseInt(room._id, 10)) == -1) {
+			updateChannel(room, retry) {
+				if (this.CHANNELS_ID.indexOf(room._id) == -1) {
 					this.unloadEmotes();
 					this.disableBadges();
 				}
 				else {
-					this.updateChannelEmotes(room);
+					this.updateChannelEmotes(room, retry);
 					this.updateBadges();
 				}
 			}
 		
-			updateAllChannels() {
+			updateAllChannels(retry = true) {
 				for (const room of this.chat.iterateRooms()) {
-					if (room) this.updateChannel(room);
+					if (room) this.updateChannel(room, retry);
 				}
 			}
 		
-			async updateChannelEmotes(room, attempts = 0) {
+			async updateChannelEmotes(room, attempts = 0, retry = true) {
 				room.removeSet(this.ADDON_ID, this.ADDON_EMOTES_ID);
 		
 				if (!this.chat.context.get(this.EMOTICONS_SETTINGS_CHECK)) {
@@ -127,7 +136,7 @@
 					room.addSet(this.ADDON_ID, this.ADDON_EMOTES_ID, emoteSet);
 		
 				} else {
-					if (response.status === 404) return;
+					if (response.status === 404 || !retry) return;
 		
 					const newAttempts = (attempts || 0) + 1;
 					if (newAttempts < 12) {
@@ -137,7 +146,7 @@
 				}
 			}
 		
-			async updateBadges(attempts = 0) {
+			async updateBadges(attempts = 0,retry = true) {
 				this.disableBadges();
 				if (!this.settings.get(this.BADGES_SETTINGS_CHECK)) {
 					return;
@@ -191,7 +200,7 @@
 		
 				}
 				else {
-					if (baseBadgesResponse.status === 404) return;
+					if (baseBadgesResponse.status === 404 || !retry) return;
 		
 					const newAttempts = (attempts || 0) + 1;
 					if (newAttempts < 12) {
