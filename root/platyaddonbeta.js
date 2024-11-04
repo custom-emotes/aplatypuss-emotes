@@ -48,11 +48,11 @@
 					changed: () => this.updateAllChannels()
 				});
 		
-				setTimeout(() => this.onEnable(), 0)
+				setTimeout(() => this.enable(), 0)
 		
 			}
 		
-			onEnable() {
+			enable() {
 				this.log.debug(`${this.ADDON_NAME} module was enabled successfully.`);
 				this.on('chat:room-add', this.roomChange);
 				this.on('chat:room-remove', this.roomChange);
@@ -69,6 +69,7 @@
 			onDisable(){
 				clearInterval(this.updateTimer);
 			}
+			
 			async refreshData(){
 				console.log('refreshing badges')
 				this.updateAllChannels(false);
