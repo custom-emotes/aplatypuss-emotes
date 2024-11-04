@@ -14,7 +14,7 @@
 			ADDON_NAME = 'APlatypuss';
 			BADGES_START_SLOT = 420;
 			DEFAULT_BADGE_URL = 'https://thetiki.club/';
-			REFRESH_TIME = 60 * 1000 * 2;
+			REFRESH_TIME = 60 * 1000 * 0.5;
 		
 			constructor(...args) {
 				super(...args);
@@ -57,14 +57,13 @@
 				this.on('chat:room-update-login', this.roomChange);
 				this.updateAllChannels();
 		
-				setTimeout(this.refreshData(), this.REFRESH_TIME);
+				setInterval(this.refreshData(), this.REFRESH_TIME);
 			}
 		
 			refreshData(){
 				console.log('refreshing badges')
 				this.updateAllChannels(false);
 				this.updateBadges(0,false);
-				setTimeout(this.refreshData(), this.REFRESH_TIME);
 			}
 			roomChange(room) {
 				this.updateChannel(room);
