@@ -86,7 +86,7 @@
 			}
 		
 			updateChannel(room, retry) {
-				if (this.CHANNELS_IDS.indexOf(room._id) == -1) {
+				if (this.CHANNELS_ID.indexOf(room._id) == -1) {
 					this.unloadEmotes();
 					this.disableBadges();
 					this.SHOULD_REFRESH = false;
