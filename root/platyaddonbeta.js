@@ -2,9 +2,9 @@
 (() => {
 	function main_init() {
 		class Aplatypuss extends FrankerFaceZ.utilities.addon.Addon {
-			HOST_URL = "https://ffz.thetiki.club";
+			HOST_URL = 'https://ffz.thetiki.club';
 			ASSETS_URL = `${this.HOST_URL}/static`;
-			CHANNEL_ID = 39464264;
+			CHANNELS_ID = [39464264, 25118940];
 			ADDON_ID = 'addon--aplatypuss';
 			ADDON_EMOTES_ID = 'addon--aplatypuss--emotes';
 			ADDON_BADGES_ID = 'addon--aplatypuss--badges';
@@ -12,6 +12,7 @@
 			EMOTICONS_SETTINGS_CHECK = 'aplatypuss.enable_emoticons';
 			BADGE_PREFIX = 'aplatypuss-badge-';
 			ADDON_NAME = 'APlatypuss';
+			BADGES_START_SLOT = 420;
 			DEFAULT_BADGE_URL = 'https://thetiki.club/';
 		
 			constructor(...args) {
@@ -21,9 +22,17 @@
 				this.inject('chat');
 				this.inject('chat.badges');
 				this.inject('chat.emotes');
-				this.inject('i18n');
 		
-				this.badgesLength = 0;
+				this.settings.add(this.EMOTICONS_SETTINGS_CHECK, {
+					default: true,
+					ui: {
+						path: `Add-Ons > ${this.ADDON_NAME} >> Emotes`,
+						title: 'Show Emotes',
+						description: 'Enable to show custom emotes.',
+						component: 'setting-check-box',
+					},
+					changed: () => this.updateAllChannels()
+				});
 		
 				this.settings.add(this.BADGES_SETTINGS_CHECK, {
 					default: true,
@@ -36,36 +45,24 @@
 					changed: () => this.updateAllChannels()
 				});
 		
-				this.settings.add(this.EMOTICONS_SETTINGS_CHECK, {
-					default: true,
+				setTimeout(() => this.enable(), 0)
 		
-					ui: {
-						path: `Add-Ons > ${this.ADDON_NAME} >> Emotes`,
-						title: 'Show Emotes',
-						description: 'Enable to show custom emotes.',
-						component: 'setting-check-box',
-					},
-					changed: () => this.updateAllChannels()
-				});
-
-				this.onEnable();
 			}
 		
-			onEnable() {
+			enable() {
 				this.log.debug(`${this.ADDON_NAME} module was enabled successfully.`);
-		
 				this.on('chat:room-add', this.roomChange);
 				this.on('chat:room-remove', this.roomChange);
 				this.on('chat:room-update-login', this.roomChange);
 				this.updateAllChannels();
 			}
-
+		
 			roomChange(room) {
 				this.updateChannel(room);
 			}
-
+		
 			updateChannel(room) {
-				if (room._id != this.CHANNEL_ID) {
+				if (this.CHANNELS_ID.indexOf(parseInt(room._id, 10)) == -1) {
 					this.unloadEmotes();
 					this.disableBadges();
 				}
@@ -81,51 +78,6 @@
 				}
 			}
 		
-			async updateBadges(attempts = 0) {
-				this.disableBadges();
-				if (!this.settings.get(this.BADGES_SETTINGS_CHECK)) {
-					return;
-				}
-				const BadgesResponse = await fetch(`${this.HOST_URL}/${badgesDefinition.json}`);
-				if (BadgesResponse.ok) {
-					const badgeData = await BadgesResponse.json();
-					this.badgesLength = badgeData.length;
-		
-					for (let i = 0; i < this.badgesLength; i++) {
-						const badge = badgeData[i];
-						const badgeId = `${this.BADGE_PREFIX}${i}`;
-						this.badges.loadBadgeData(badgeId, {
-							id: `${this.BADGE_PREFIX}${i}`,
-							addon: this.ADDON_ID,
-							title: badge.tooltip,
-							slot: 420 + i,
-							image: `${this.ASSETS_URL}/${badge.image1}`,
-							urls: {
-								1: `${this.ASSETS_URL}/${badge.image1}`,
-								2: `${this.ASSETS_URL}/${badge.image2}`,
-								4: `${this.ASSETS_URL}/${badge.image3}`,
-							},
-							click_url: this.DEFAULT_BADGE_URL
-		
-						});
-						this.badges.setBulk(this.ADDON_BADGES_ID, badgeId, badge.users);
-		
-					}
-					this.badges.buildBadgeCSS();
-					this.emit('chat:update-lines');
-		
-				} else {
-					if (BadgesResponse.status === 404) return;
-		
-					const newAttempts = (attempts || 0) + 1;
-					if (newAttempts < 12) {
-						this.log.error(`Failed to fetch ${this.ADDON_NAME} badges. Trying again in 5 seconds.`);
-						setTimeout(this.updateBadges.bind(this, newAttempts), 5000);
-					}
-				}
-		
-			}
-		
 			async updateChannelEmotes(room, attempts = 0) {
 				room.removeSet(this.ADDON_ID, this.ADDON_EMOTES_ID);
 		
@@ -133,7 +85,7 @@
 					return;
 				}
 		
-				const response = await fetch(this.HOST_URL + 'emotes.json');
+				const response = await fetch(`${this.HOST_URL}/emotes.json`);
 				if (response.ok) {
 					const emotesData = [];
 		
@@ -155,26 +107,24 @@
 						};
 		
 						emote.urls = {
-							1: this.ASSETS_URL + `${dataEmote.id}` + "_1X.webp",
-							2: this.ASSETS_URL + `${dataEmote.id}` + "_2X.webp",
-							4: this.ASSETS_URL + `${dataEmote.id}` + "_3X.webp",
+							1: `${this.ASSETS_URL}/${dataEmote.id}_1X.webp`,
+							2: `${this.ASSETS_URL}/${dataEmote.id}_2X.webp`,
+							4: `${this.ASSETS_URL}/${dataEmote.id}_3X.webp`,
 						};
-		
-		
 						emotesData.push(emote);
 					}
 		
 		
-					let setEmotes = [];
-					setEmotes = setEmotes.concat(emotesData);
+					let emotesArray = [];
+					emotesArray = emotesArray.concat(emotesData);
 		
-					let set = {
-						emoticons: setEmotes,
+					const emoteSet = {
+						emoticons: emotesArray,
 						title: 'Channel Emotes',
 						source: `${this.ADDON_NAME}`,
-						icon: this.ASSETS_URL + 'icon.png',
+						icon: `${this.ASSETS_URL}/icon.png`,
 					};
-					room.addSet(this.ADDON_ID, this.ADDON_EMOTES_ID, set);
+					room.addSet(this.ADDON_ID, this.ADDON_EMOTES_ID, emoteSet);
 		
 				} else {
 					if (response.status === 404) return;
@@ -183,6 +133,70 @@
 					if (newAttempts < 12) {
 						this.log.error(`Failed to fetch ${this.ADDON_NAME} emotes. Trying again in 5 seconds.`);
 						setTimeout(this.updateChannelEmotes.bind(this, room, newAttempts), 5000);
+					}
+				}
+			}
+		
+			async updateBadges(attempts = 0) {
+				this.disableBadges();
+				if (!this.settings.get(this.BADGES_SETTINGS_CHECK)) {
+					return;
+				}
+				const baseBadgesResponse = await fetch(`${this.HOST_URL}/badgesDefinitions.json`);
+				const baseUsersResponse = await fetch(`${this.HOST_URL}/badgesUsers.json`);
+		
+				if (baseBadgesResponse.ok && baseUsersResponse.ok) {
+					const baseBadgeData = await baseBadgesResponse.json();
+					const badgeKeys = Object.keys(baseBadgeData);
+					this.badgesLength = badgeKeys.length;
+					let badges = {};
+					let badgesUsers = {};
+		
+					for (let i = 0; i < badgeKeys.length; i++) {
+						const badge = baseBadgeData[badgeKeys[i]]
+						const badgeId = `${this.BADGE_PREFIX}${badgeKeys[i].toLowerCase()}`;
+						badges[badgeId] = {
+							id: `${badgeId}`,
+							addon: this.ADDON_ID,
+							name: badgeKeys[i],
+							title: badge.tooltip,
+							slot: this.BADGES_START_SLOT + i,
+							image: this.ASSETS_URL + badge.image1,
+							urls: {
+								1: `${this.ASSETS_URL}/${badge.image1}`,
+								2: `${this.ASSETS_URL}/${badge.image2}`,
+								4: `${this.ASSETS_URL}/${badge.image3}`,
+							},
+							click_url: badge.url ?? this.DEFAULT_BADGE_URL
+						};
+						badgesUsers[badgeId] = badge.users ?? [];
+					}
+					const usersData = await baseUsersResponse.json();
+		
+					for (let i = 0; i < usersData.length; i++) {
+						const userData = usersData[i]
+						for (let j = 0; j < userData.badges.length; j++) {
+							const badgeId = `${this.BADGE_PREFIX}${userData.badges[j].toLowerCase()}`;
+							badgesUsers[badgeId] = badgesUsers[badgeId].concat(userData.user);
+						}
+		
+					}
+					for (let i = 0; i < badgeKeys.length; i++) {
+						const badgeId = `${this.BADGE_PREFIX}${badgeKeys[i].toLowerCase()}`;
+						this.badges.loadBadgeData(badgeId, badges[badgeId]);
+						this.badges.setBulk(this.ADDON_BADGES_ID, badgeId, badgesUsers[badgeId]);
+					}
+					this.badges.buildBadgeCSS();
+					this.emit('chat:update-lines');
+		
+				}
+				else {
+					if (baseBadgesResponse.status === 404) return;
+		
+					const newAttempts = (attempts || 0) + 1;
+					if (newAttempts < 12) {
+						this.log.error(`Failed to fetch ${this.ADDON_NAME} badges. Trying again in 5 seconds.`);
+						setTimeout(this.updateBadges.bind(this, newAttempts), 5000);
 					}
 				}
 			}
@@ -199,16 +213,9 @@
 				this.emotes.unloadSet(this.ADDON_ID, this.ADDON_EMOTES_ID);
 			}
 		
-			// loadEmotes() {
-			// 	this.emotes.loadSet(this.ADDON_ID, this.ADDON_EMOTES_ID);
-			// }
-		
-			getIdFromIndex(index) {
-				return;
-			}
 		}
 		
-		Aplatypuss.register();
+		Aplatypuss.register('aplatypuss-emotes');
 	}
 	function checkExistance(attempts) {
 		if (window.FrankerFaceZ) {
