@@ -5,19 +5,24 @@
 			HOST_URL = 'https://ffz.thetiki.club';
 			ASSETS_URL = `${this.HOST_URL}/static`;
 			CHANNELS_ID = [39464264, 25118940];
-			ADDON_ID = 'addon.aplatypuss-emotes';
+
+			ADDON_ID = 'addon.aplatypuss';
+			ADDON_NAME = 'APlatypuss';
+		
 			ADDON_EMOTES_ID = `${this.ADDON_ID}.emotes`;
+			EMOTICONS_SETTINGS_CHECK = `${this.ADDON_ID}.enable_emotes`;
+		
 			ADDON_BADGES_ID = `${this.ADDON_ID}.badges`;
 			BADGES_SETTINGS_CHECK = `${this.ADDON_ID}.enable_badges`;
-			EMOTICONS_SETTINGS_CHECK = `${this.ADDON_ID}.enable_emoticons`;
-			BADGE_PREFIX = `${this.ADDON_ID}.badge-`;
-			ADDON_NAME = 'APlatypuss';
+			BADGE_PREFIX = `${this.ADDON_ID}.badge`;
 			BADGES_START_SLOT = 420;
 			DEFAULT_BADGE_URL = 'https://thetiki.club/';
-			REFRESH_TIME = 30 * 1000;
-			
-			updateTimer = null;
 		
+			REFRESH_TIME = 30 * 1000;	
+			UPDATE_TIMER_ID = null;
+			BADGES_KEYS = [];
+			SHOULD_REFRESH = true;
+			
 			constructor(...args) {
 				super(...args);
 		
@@ -53,27 +58,27 @@
 			}
 		
 			enable() {
-				this.log.debug(`${this.ADDON_NAME} module was enabled successfully.`);
+				this.log.info(`addon was enabled`);
 				this.on('chat:room-add', this.roomChange);
 				this.on('chat:room-remove', this.roomChange);
 				this.on('chat:room-update-login', this.roomChange);
-				this.updateAllChannels();
+				this.refreshData();
 		
-				this.updateTimer = setInterval(() => {
+				this.UPDATE_TIMER_ID = setInterval(() => {
 					this.refreshData();
 				}, this.REFRESH_TIME);
-		
-				setInterval(this.refreshData(), this.REFRESH_TIME);
 			}
 		
 			onDisable(){
-				clearInterval(this.updateTimer);
+				clearInterval(this.UPDATE_TIMER_ID);
 			}
 			async refreshData(){
-				this.log.debug(`refreshing ${this.ADDON_ID} emotes and badges`)
+				this.log.info(`refreshing emotes and badges`)
 				this.updateAllChannels(false);
 				await this.updateBadges(0,false);
-				this.log.debug(`refreshed ${this.ADDON_ID} emotes and badges`)
+				if(!this.SHOULD_REFRESH){
+					clearInterval(this.UPDATE_TIMER_ID);
+				}
 			}
 			
 			roomChange(room) {
@@ -81,9 +86,12 @@
 			}
 		
 			updateChannel(room, retry) {
-				if (this.CHANNELS_ID.indexOf(room._id) == -1) {
+				if (this.CHANNELS_IDS.indexOf(room._id) == -1) {
 					this.unloadEmotes();
 					this.disableBadges();
+					this.SHOULD_REFRESH = false;
+					this.log.info(`disabling on room ${room._id} (is not present in the ID's list)`);
+		
 				}
 				else {
 					this.updateChannelEmotes(room, retry);
@@ -167,18 +175,17 @@
 				if (baseBadgesResponse.ok && baseUsersResponse.ok) {
 					const baseBadgeData = await baseBadgesResponse.json();
 					const usersData = await baseUsersResponse.json();
-					const badgeKeys = Object.keys(baseBadgeData);
-					this.badgesLength = badgeKeys.length;
+					this.BADGES_KEYS = Object.keys(baseBadgeData);
 					const badges = {};
 					const badgesUsers = {};
 		
-					for (let i = 0; i < badgeKeys.length; i++) {
-						const badge = baseBadgeData[badgeKeys[i]]
-						const badgeId = `${this.BADGE_PREFIX}${badgeKeys[i].toLowerCase()}`;
+					for (let i = 0; i < this.BADGES_KEYS.length; i++) {
+						const badge = baseBadgeData[this.BADGES_KEYS[i]]
+						const badgeId = `${this.BADGE_PREFIX}.${this.BADGES_KEYS[i].toLowerCase()}`;
 						badges[badgeId] = {
 							id: `${badgeId}`,
 							addon: this.ADDON_ID,
-							name: badgeKeys[i],
+							name: this.BADGES_KEYS[i],
 							title: badge.tooltip,
 							slot: this.BADGES_START_SLOT + i,
 							image: this.ASSETS_URL + badge.image1,
@@ -195,13 +202,13 @@
 					for (let i = 0; i < usersData.length; i++) {
 						const userData = usersData[i]
 						for (let j = 0; j < userData.badges.length; j++) {
-							const badgeId = `${this.BADGE_PREFIX}${userData.badges[j].toLowerCase()}`;
+							const badgeId = `${this.BADGE_PREFIX}.${userData.badges[j].toLowerCase()}`;
 							badgesUsers[badgeId] = badgesUsers[badgeId].concat(userData.user);
 						}
 		
 					}
-					for (let i = 0; i < badgeKeys.length; i++) {
-						const badgeId = `${this.BADGE_PREFIX}${badgeKeys[i].toLowerCase()}`;
+					for (let i = 0; i < this.BADGES_KEYS.length; i++) {
+						const badgeId = `${this.BADGE_PREFIX}.${this.BADGES_KEYS[i].toLowerCase()}`;
 						this.badges.loadBadgeData(badgeId, badges[badgeId]);
 						this.badges.setBulk(this.ADDON_BADGES_ID, badgeId, badgesUsers[badgeId]);
 					}
@@ -221,8 +228,9 @@
 			}
 		
 			disableBadges() {
-				for (let i = 0; i < this.badgesLength; i++) {
-					this.badges.deleteBulk(this.ADDON_BADGES_ID, `${this.BADGE_PREFIX}${i}`);
+				for (let i = 0; i < this.BADGES_KEYS.length; i++) {
+					const badgeId = `${this.BADGE_PREFIX}.${this.BADGES_KEYS[i].toLowerCase()}`;
+					this.badges.deleteBulk(this.ADDON_BADGES_ID, badgeId);
 				}
 				this.badges.buildBadgeCSS();
 				this.emit('chat:update-lines');
@@ -234,7 +242,7 @@
 		
 		}
 		
-		Aplatypuss.register('aplatypuss-emotes');
+		Aplatypuss.register('aplatypuss');
 	}
 	function checkExistance(attempts) {
 		if (window.FrankerFaceZ) {
