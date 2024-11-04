@@ -5,17 +5,17 @@
 			HOST_URL = 'https://ffz.thetiki.club';
 			ASSETS_URL = `${this.HOST_URL}/static`;
 			CHANNELS_ID = [39464264, 25118940];
-			ADDON_ID = 'addon--aplatypuss';
-			ADDON_EMOTES_ID = 'addon--aplatypuss--emotes';
-			ADDON_BADGES_ID = 'addon--aplatypuss--badges';
-			BADGES_SETTINGS_CHECK = 'aplatypuss.enable_badges';
-			EMOTICONS_SETTINGS_CHECK = 'aplatypuss.enable_emoticons';
-			BADGE_PREFIX = 'aplatypuss-badge-';
+			ADDON_ID = 'addon.aplatypuss-emotes';
+			ADDON_EMOTES_ID = `${this.ADDON_ID}.emotes`;
+			ADDON_BADGES_ID = `${this.ADDON_ID}.badges`;
+			BADGES_SETTINGS_CHECK = `${this.ADDON_ID}.enable_badges`;
+			EMOTICONS_SETTINGS_CHECK = `${this.ADDON_ID}.enable_emoticons`;
+			BADGE_PREFIX = `${this.ADDON_ID}.badge-`;
 			ADDON_NAME = 'APlatypuss';
 			BADGES_START_SLOT = 420;
 			DEFAULT_BADGE_URL = 'https://thetiki.club/';
 			REFRESH_TIME = 30 * 1000;
-	
+			
 			updateTimer = null;
 		
 			constructor(...args) {
@@ -69,13 +69,11 @@
 			onDisable(){
 				clearInterval(this.updateTimer);
 			}
-			
 			async refreshData(){
-				console.log('refreshing badges')
+				this.log.debug(`refreshing ${this.ADDON_ID} emotes and badges`)
 				this.updateAllChannels(false);
 				await this.updateBadges(0,false);
-				console.log('refreshed badges')
-		
+				this.log.debug(`refreshed ${this.ADDON_ID} emotes and badges`)
 			}
 			
 			roomChange(room) {
@@ -168,10 +166,11 @@
 		
 				if (baseBadgesResponse.ok && baseUsersResponse.ok) {
 					const baseBadgeData = await baseBadgesResponse.json();
+					const usersData = await baseUsersResponse.json();
 					const badgeKeys = Object.keys(baseBadgeData);
 					this.badgesLength = badgeKeys.length;
-					let badges = {};
-					let badgesUsers = {};
+					const badges = {};
+					const badgesUsers = {};
 		
 					for (let i = 0; i < badgeKeys.length; i++) {
 						const badge = baseBadgeData[badgeKeys[i]]
@@ -192,7 +191,6 @@
 						};
 						badgesUsers[badgeId] = badge.users ?? [];
 					}
-					const usersData = await baseUsersResponse.json();
 		
 					for (let i = 0; i < usersData.length; i++) {
 						const userData = usersData[i]
