@@ -2,8 +2,8 @@
 (() => {
 	function main_init() {
 		class Aplatypuss extends FrankerFaceZ.utilities.addon.Addon {
-			HOST_URL = "https://aplatypuss-emotes.pages.dev/";
-			ASSETS_URL = this.HOST_URL + "static/";
+			HOST_URL = "https://ffz.thetiki.club";
+			ASSETS_URL = `${this.HOST_URL}/static`;
 			CHANNEL_ID = 39464264;
 			ADDON_ID = 'addon--aplatypuss';
 			ADDON_EMOTES_ID = 'addon--aplatypuss--emotes';
@@ -12,7 +12,7 @@
 			EMOTICONS_SETTINGS_CHECK = 'aplatypuss.enable_emoticons';
 			BADGE_PREFIX = 'aplatypuss-badge-';
 			ADDON_NAME = 'APlatypuss';
-			BADGE_URL = 'https://aplatypuss-emotes.pages.dev';
+			DEFAULT_BADGE_URL = 'https://thetiki.club/';
 		
 			constructor(...args) {
 				super(...args);
@@ -86,9 +86,9 @@
 				if (!this.settings.get(this.BADGES_SETTINGS_CHECK)) {
 					return;
 				}
-				const response = await fetch(this.HOST_URL + 'badges.json');
-				if (response.ok) {
-					const badgeData = await response.json();
+				const BadgesResponse = await fetch(`${this.HOST_URL}/${badgesDefinition.json}`);
+				if (BadgesResponse.ok) {
+					const badgeData = await BadgesResponse.json();
 					this.badgesLength = badgeData.length;
 		
 					for (let i = 0; i < this.badgesLength; i++) {
@@ -99,13 +99,13 @@
 							addon: this.ADDON_ID,
 							title: badge.tooltip,
 							slot: 420 + i,
-							image: this.ASSETS_URL + badge.image1,
+							image: `${this.ASSETS_URL}/${badge.image1}`,
 							urls: {
-								1: this.ASSETS_URL + badge.image1,
-								2: this.ASSETS_URL + badge.image2,
-								4: this.ASSETS_URL + badge.image3,
+								1: `${this.ASSETS_URL}/${badge.image1}`,
+								2: `${this.ASSETS_URL}/${badge.image2}`,
+								4: `${this.ASSETS_URL}/${badge.image3}`,
 							},
-							click_url: this.BADGE_URL
+							click_url: this.DEFAULT_BADGE_URL
 		
 						});
 						this.badges.setBulk(this.ADDON_BADGES_ID, badgeId, badge.users);
@@ -115,7 +115,7 @@
 					this.emit('chat:update-lines');
 		
 				} else {
-					if (response.status === 404) return;
+					if (BadgesResponse.status === 404) return;
 		
 					const newAttempts = (attempts || 0) + 1;
 					if (newAttempts < 12) {
