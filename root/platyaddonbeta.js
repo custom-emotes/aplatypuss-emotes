@@ -26,11 +26,9 @@
 			SHOULD_REFRESH = true;
 		
 			BADGES_KEYS = [];
-			OLD_BADGES = {};
-			OLD_BADGES_USERS = {};
 			CURRENT_BADGES = {};
 			CURRENT_BADGES_USERS = {};
-			EMOTES_ARRAY = [];
+		
 		
 			constructor(...args) {
 				super(...args);
@@ -130,8 +128,6 @@
 				else {
 					this.unloadEmotes();
 					this.updateChannelEmotes(room, retry);
-					this.disableBadges();
-					this.updateBadges();
 				}
 			}
 		
@@ -177,11 +173,11 @@
 					}
 		
 		
-					this.EMOTES_ARRAY = [];
-					this.EMOTES_ARRAY = this.EMOTES_ARRAY.concat(emotesData);
+					let EMOTES_ARRAY = [];
+					EMOTES_ARRAY = EMOTES_ARRAY.concat(emotesData);
 		
 					const emoteSet = {
-						emoticons: this.EMOTES_ARRAY,
+						emoticons: EMOTES_ARRAY,
 						title: 'Channel Emotes',
 						source: `${this.ADDON_NAME}`,
 						icon: `${this.ASSETS_URL}/icon.png`,
@@ -210,13 +206,13 @@
 					const baseBadgeData = await baseBadgesResponse.json();
 					const usersData = await baseUsersResponse.json();
 					this.BADGES_KEYS = Object.keys(baseBadgeData);
-					this.CURRENT_BADGES = {};
-					this.CURRENT_BADGES_USERS = {};
+					const NEW_BADGES = {};
+					const NEW_BADGES_USERS = {};
 		
 					for (let i = 0; i < this.BADGES_KEYS.length; i++) {
 						const badge = baseBadgeData[this.BADGES_KEYS[i]]
 						const badgeId = `${this.BADGE_PREFIX}.${this.BADGES_KEYS[i].toLowerCase()}`;
-						this.CURRENT_BADGES[badgeId] = {
+						NEW_BADGES[badgeId] = {
 							id: `${badgeId}`,
 							addon: this.ADDON_ID,
 							name: this.BADGES_KEYS[i],
@@ -230,27 +226,29 @@
 							},
 							click_url: badge.url ?? this.DEFAULT_BADGE_URL
 						};
-						this.CURRENT_BADGES_USERS[badgeId] = badge.users ?? [];
+						NEW_BADGES_USERS[badgeId] = badge.users ?? [];
 					}
 		
 					for (let i = 0; i < usersData.length; i++) {
 						const userData = usersData[i]
 						for (let j = 0; j < userData.badges.length; j++) {
 							const badgeId = `${this.BADGE_PREFIX}.${userData.badges[j].toLowerCase()}`;
-							this.CURRENT_BADGES_USERS[badgeId] = this.CURRENT_BADGES_USERS[badgeId].concat(userData.user);
+							NEW_BADGES_USERS[badgeId] = NEW_BADGES_USERS[badgeId].concat(userData.user);
 						}
 		
 					}
 		
-					if (!(JSON.stringify(this.CURRENT_BADGES) === JSON.stringify(this.OLD_BADGES) || JSON.stringify(this.CURRENT_BADGES_USERS) === JSON.stringify(this.OLD_BADGES_USERS))) {
+					if (!(JSON.stringify(NEW_BADGES) === JSON.stringify(this.CURRENT_BADGES) || JSON.stringify(NEW_BADGES_USERS) === JSON.stringify(this.CURRENT_BADGES_USERS))) {
 						this.log.info(`Badge Info Differs, updating ...`);
+						this.CURRENT_BADGES = structuredClone(NEW_BADGES);
+						this.CURRENT_BADGES_USERS = structuredClone(NEW_BADGES_USERS);
+		
 						for (let i = 0; i < this.BADGES_KEYS.length; i++) {
 							const badgeId = `${this.BADGE_PREFIX}.${this.BADGES_KEYS[i].toLowerCase()}`;
-							this.badges.loadBadgeData(badgeId, this.CURRENT_BADGES[badgeId]);
-							this.badges.setBulk(this.ADDON_BADGES_ID, badgeId, this.CURRENT_BADGES_USERS[badgeId]);
+							this.badges.loadBadgeData(badgeId, (this.CURRENT_BADGES[badgeId]));
+							this.badges.setBulk(this.ADDON_BADGES_ID, badgeId, (this.CURRENT_BADGES_USERS[badgeId]));
 						}
-						this.OLD_BADGES = structuredClone(this.CURRENT_BADGES);
-						this.OLD_BADGES_USERS = structuredClone(this.CURRENT_BADGES_USERS);
+		
 						this.badges.buildBadgeCSS();
 						this.emit('chat:update-lines');
 					}
