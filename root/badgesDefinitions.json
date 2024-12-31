@@ -15,6 +15,14 @@
     "url": "",
     "users": ["45991495"]
   },
+  "Jorker": {
+    "tooltip": "Jorker",
+    "image1": "jork_28.webp",
+    "image2": "jork_56.webp",
+    "image3": "jork_112.webp",
+    "url": "",
+    "users": ["25118940"]
+  },
   "CANSEE": {
     "tooltip": "CANSEE",
     "image1": "morbius7_1X.webp",
