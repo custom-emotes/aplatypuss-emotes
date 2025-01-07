@@ -14,5 +14,13 @@
     "image3": "reotto_112.webp",
     "url": "",
     "users": []
+  },
+  "CEO": {
+    "tooltip": "CEO",
+    "image1": "CEO_28.webp",
+    "image2": "CEO_56.webp",
+    "image3": "CEO_112.webp",
+    "url": "",
+    "users": []
   }
 }
