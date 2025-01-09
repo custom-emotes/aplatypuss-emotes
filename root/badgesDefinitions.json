@@ -22,5 +22,13 @@
     "image3": "CEO_112.webp",
     "url": "",
     "users": []
+  },
+  "20": {
+    "tooltip": "Level 20",
+    "image1": "20_28.webp",
+    "image2": "20_56.webp",
+    "image3": "20_112.webp",
+    "url": "",
+    "users": ["25118940"]
   }
 }
