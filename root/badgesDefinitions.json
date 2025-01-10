@@ -30,5 +30,21 @@
     "image3": "20_112.webp",
     "url": "",
     "users": ["25118940"]
+  },
+  "15": {
+    "tooltip": "Level 15",
+    "image1": "15_28.webp",
+    "image2": "15_56.webp",
+    "image3": "15_112.webp",
+    "url": "",
+    "users": ["25118940"]
+  },
+  "10": {
+    "tooltip": "Level 10",
+    "image1": "10_28.webp",
+    "image2": "10_56.webp",
+    "image3": "10_112.webp",
+    "url": "",
+    "users": ["25118940"]
   }
 }
