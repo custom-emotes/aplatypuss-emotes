@@ -23,6 +23,22 @@
     "url": "",
     "users": []
   },
+  "1": {
+    "tooltip": "1",
+    "image1": "1_28.webp",
+    "image2": "1_56.webp",
+    "image3": "1_112.webp",
+    "url": "",
+    "users": ["25118940"]
+  },
+  "5": {
+    "tooltip": "5",
+    "image1": "5_28.webp",
+    "image2": "5_56.webp",
+    "image3": "5_112.webp",
+    "url": "",
+    "users": ["25118940"]
+  },
   "10": {
     "tooltip": "10",
     "image1": "10_28.webp",
