@@ -29,7 +29,7 @@
     "image2": "1_56.webp",
     "image3": "1_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "2": {
     "tooltip": "2",
@@ -37,7 +37,7 @@
     "image2": "2_56.webp",
     "image3": "2_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "3": {
     "tooltip": "3",
@@ -45,7 +45,7 @@
     "image2": "3_56.webp",
     "image3": "3_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "4": {
     "tooltip": "4",
@@ -53,7 +53,7 @@
     "image2": "4_56.webp",
     "image3": "4_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "5": {
     "tooltip": "5",
@@ -61,7 +61,7 @@
     "image2": "5_56.webp",
     "image3": "5_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "6": {
     "tooltip": "6",
@@ -69,7 +69,7 @@
     "image2": "6_56.webp",
     "image3": "6_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "7": {
     "tooltip": "7",
@@ -77,7 +77,7 @@
     "image2": "7_56.webp",
     "image3": "7_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "8": {
     "tooltip": "8",
@@ -85,7 +85,7 @@
     "image2": "8_56.webp",
     "image3": "8_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "9": {
     "tooltip": "9",
@@ -93,7 +93,7 @@
     "image2": "9_56.webp",
     "image3": "9_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "10": {
     "tooltip": "10",
@@ -101,7 +101,7 @@
     "image2": "10_56.webp",
     "image3": "10_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "11": {
     "tooltip": "11",
@@ -109,7 +109,7 @@
     "image2": "11_56.webp",
     "image3": "11_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "12": {
     "tooltip": "12",
@@ -117,7 +117,7 @@
     "image2": "12_56.webp",
     "image3": "12_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "13": {
     "tooltip": "13",
@@ -125,7 +125,7 @@
     "image2": "13_56.webp",
     "image3": "13_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "14": {
     "tooltip": "14",
@@ -133,7 +133,7 @@
     "image2": "14_56.webp",
     "image3": "14_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "15": {
     "tooltip": "15",
@@ -141,7 +141,7 @@
     "image2": "15_56.webp",
     "image3": "15_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "16": {
     "tooltip": "16",
@@ -149,7 +149,7 @@
     "image2": "16_56.webp",
     "image3": "16_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "17": {
     "tooltip": "17",
@@ -157,7 +157,7 @@
     "image2": "17_56.webp",
     "image3": "17_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "18": {
     "tooltip": "18",
@@ -165,7 +165,7 @@
     "image2": "18_56.webp",
     "image3": "18_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "19": {
     "tooltip": "19",
@@ -173,7 +173,7 @@
     "image2": "19_56.webp",
     "image3": "19_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "20": {
     "tooltip": "20",
@@ -181,7 +181,7 @@
     "image2": "20_56.webp",
     "image3": "20_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   },
   "21": {
     "tooltip": "21",
@@ -189,6 +189,6 @@
     "image2": "21_56.webp",
     "image3": "21_112.webp",
     "url": "",
-    "users": ["25118940"]
+    "users": []
   }
 }
