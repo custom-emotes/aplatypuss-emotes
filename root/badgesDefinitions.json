@@ -174,5 +174,21 @@
     "image3": "19_112.webp",
     "url": "",
     "users": ["25118940"]
+  },
+  "20": {
+    "tooltip": "20",
+    "image1": "20_28.webp",
+    "image2": "20_56.webp",
+    "image3": "20_112.webp",
+    "url": "",
+    "users": ["25118940"]
+  },
+  "21": {
+    "tooltip": "21",
+    "image1": "21_28.webp",
+    "image2": "21_56.webp",
+    "image3": "21_112.webp",
+    "url": "",
+    "users": ["25118940"]
   }
 }
