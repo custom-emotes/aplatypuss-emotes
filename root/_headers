@@ -7,6 +7,12 @@
 /badges.json
 	cache-control: public, no-cache
 
+/badgesUsers.json
+	cache-control: public, no-cache
+
+/badgesDefinitions.json
+	cache-control: public, no-cache
+
 /platyaddonbeta.js
 	cache-control: public, no-cache
 
