@@ -193,9 +193,9 @@
   },
   "test": {
     "tooltip": "test",
-    "image1": "test_28.webp",
-    "image2": "test_56.webp",
-    "image3": "test_112.webp",
+    "image1": "test.webp",
+    "image2": "test.webp",
+    "image3": "test.webp",
     "url": "",
     "users": []
   }
